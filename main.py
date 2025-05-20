@@ -8,7 +8,6 @@ import sys
 
 
 def main():
-    score = 0
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
@@ -31,32 +30,45 @@ def main():
     asteroidfield = AsteroidField()
 
     dt = 0
-    
     print(f"Starting Asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")    
 
     
 
-    while True:   
+    while True:
+
         font = pygame.font.SysFont(None, 30)
-        text = font.render(f"Score: {score}", True, "white")
-        text_rect = text.get_rect(center=(90,50))    
+        
+        #scoring
+        score_text = font.render(f"Score: {player.score}", True, "white")
+        score_text_rect = score_text.get_rect(center=(90,50))
+
+        #lifes
+        life_text = font.render(f"Lifes: {player.lifes}", True, "red")
+        life_text_rect = life_text.get_rect(center=(1200,50))   
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
         updatable.update(dt)
 
-
         for ast in asteroids:
             if player.collision(ast):
-                sys.exit(f"Game over!\nYour score is: {score}")   
+                if player.lifes == 1:
+                    sys.exit(f"Game over!\nYour score is: {player.score}")
+                else:
+                    player.get_damage()
+                    for i in asteroids:
+                        i.kill()
+
             for bul in shots:
                 if ast.collision(bul):
-                    score += ast.split()
+                    player.score += ast.split()
                     bul.kill()
         
         screen.fill("black")
-        screen.blit(text, text_rect)
+        screen.blit(score_text, score_text_rect)
+        screen.blit(life_text, life_text_rect)
 
         for obj in drawable:
             obj.draw(screen)

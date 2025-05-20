@@ -4,10 +4,14 @@ from circleshape import CircleShape
 from shot import Shot
 
 class Player(CircleShape):
+    
+
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
         self.timer = 0
+        self.score = 0
+        self.lifes = 3
     
     # in the player class
     def triangle(self):
@@ -40,6 +44,13 @@ class Player(CircleShape):
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
+
+    def get_damage(self):
+        if self.timer > 0:
+            return
+        self.timer = PLAYER_GET_DAMAGE
+        self.lifes -= 1
+        self.position = pygame.Vector2(640, 360)
 
     def shoot(self):
         if self.timer > 0:
