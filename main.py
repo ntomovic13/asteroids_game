@@ -37,7 +37,8 @@ def main():
     while True:
 
         font = pygame.font.SysFont(None, 30)
-        
+        font1 = pygame.font.SysFont(None, 35)
+
         #scoring
         score_text = font.render(f"Score: {player.score}", True, "white")
         score_text_rect = score_text.get_rect(center=(90,50))
@@ -45,6 +46,14 @@ def main():
         #lifes
         life_text = font.render(f"Lifes: {player.lifes}", True, "red")
         life_text_rect = life_text.get_rect(center=(1200,50))   
+
+        #interactive
+        int_text1 = font1.render("Be carefull!", True, "green")
+        int_text2 = font1.render("This is your last chance!", True, "red")
+        int_text1_rect = int_text1.get_rect(center=(640,20))
+        int_text2_rect = int_text1.get_rect(center=(560,20))
+
+        
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -57,6 +66,7 @@ def main():
                 if player.lifes == 1:
                     sys.exit(f"Game over!\nYour score is: {player.score}")
                 else:
+                    player.timer -= PLAYER_SHOT_COOLDOWN
                     player.get_damage()
                     for i in asteroids:
                         i.kill()
@@ -69,6 +79,10 @@ def main():
         screen.fill("black")
         screen.blit(score_text, score_text_rect)
         screen.blit(life_text, life_text_rect)
+        if player.lifes == 2:
+            screen.blit(int_text1, int_text1_rect)
+        if player.lifes == 1:
+            screen.blit(int_text2, int_text2_rect)
 
         for obj in drawable:
             obj.draw(screen)

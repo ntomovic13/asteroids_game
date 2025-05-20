@@ -48,7 +48,7 @@ class Player(CircleShape):
     def get_damage(self):
         if self.timer > 0:
             return
-        self.timer = PLAYER_GET_DAMAGE
+        self.timer = PLAYER_SHOT_COOLDOWN
         self.lifes -= 1
         self.position = pygame.Vector2(640, 360)
 
