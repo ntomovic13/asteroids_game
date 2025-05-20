@@ -8,9 +8,13 @@ import sys
 
 
 def main():
+    score = 0
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
+    pygame.display.set_caption("Asteroids")
+
+    
 
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
@@ -30,7 +34,12 @@ def main():
     
     print(f"Starting Asteroids!\nScreen width: {SCREEN_WIDTH}\nScreen height: {SCREEN_HEIGHT}")    
 
-    while True:       
+    
+
+    while True:   
+        font = pygame.font.SysFont(None, 30)
+        text = font.render(f"Score: {score}", True, "white")
+        text_rect = text.get_rect(center=(90,50))    
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
@@ -40,14 +49,15 @@ def main():
 
         for ast in asteroids:
             if player.collision(ast):
-                sys.exit("Game over!")   
+                sys.exit(f"Game over!\nYour score is: {score}")   
             for bul in shots:
                 if ast.collision(bul):
-                    ast.split()
+                    score += ast.split()
                     bul.kill()
         
-        screen.fill((0, 0, 0))
-        
+        screen.fill("black")
+        screen.blit(text, text_rect)
+
         for obj in drawable:
             obj.draw(screen)
 
